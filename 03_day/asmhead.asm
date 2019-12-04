@@ -13,28 +13,28 @@ SCRNX	EQU		0x0ff4			; 分辨率X
 SCRNY	EQU		0x0ff6			; 分辨率Y
 VRAM	EQU		0x0ff8			; 图像缓冲区的起始地址
 
-		ORG		0xc200			;  这个的程序要被装载的内存地址
+	ORG		0xc200			;  这个的程序要被装载的内存地址
 
 ; 画面モードを設定
 
-		MOV		AL,0x13			; VGA显卡，320x200x8bit
-		MOV		AH,0x00
-		INT		0x10
-		MOV		BYTE [VMODE],8	; 屏幕的模式（参考C语言的引用）
-		MOV		WORD [SCRNX],320
-		MOV		WORD [SCRNY],200
-		MOV		DWORD [VRAM],0x000a0000
+	MOV		AL,0x13			; VGA显卡，320x200x8bit
+	MOV		AH,0x00
+	INT		0x10
+	MOV		BYTE [VMODE],8	; 屏幕的模式（参考C语言的引用）
+	MOV		WORD [SCRNX],320
+	MOV		WORD [SCRNY],200
+	MOV		DWORD [VRAM],0x000a0000
 
 ; 通过BIOS获取指示灯状态
 
-		MOV		AH,0x02
-		INT		0x16 			; keyboard BIOS
-		MOV		[LEDS],AL
+	MOV		AH,0x02
+	INT		0x16 			; keyboard BIOS
+	MOV		[LEDS],AL
 
 ; 防止PIC接受所有中断
-;	AT兼容机的规范、PIC初始化
-;	然后之前在CLI不做任何事就挂起
-;	PIC在同意后初始化
+; AT兼容机的规范、PIC初始化
+; 然后之前在CLI不做任何事就挂起
+; PIC在同意后初始化
 
 		MOV		AL,0xff
 		OUT		0x21,AL
